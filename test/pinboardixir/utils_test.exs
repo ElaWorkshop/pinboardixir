@@ -1,6 +1,5 @@
 defmodule Pinboardixir.UtilsTest do
-  use ExUnit.Case
-  doctest Pinboardixir.Utils
+  use ExUnit.Case, async: true
 
   import Pinboardixir.Utils
 

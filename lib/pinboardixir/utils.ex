@@ -9,7 +9,7 @@ defmodule Pinboardixir.Utils do
   def build_params(nil, _), do: ""
   def build_params(raw_options, valid_options) do
     raw_options
-    |> Enum.filter(fn {k, _v} -> k in valid_options end)
+    |> Keyword.take(valid_options)
     |> Enum.map_join("&", fn {k, v} -> "#{Atom.to_string(k)}=#{v}" end)
     |> URI.encode
     |> prefix_question_mark
