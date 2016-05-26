@@ -30,7 +30,7 @@ defmodule Pinboardixir.Mixfile do
   defp package do
     [
       name: :pinboardixir,
-      maintainers: ["Lou Xun <aquarhead@gmail.com>"],
+      maintainers: ["Lou Xun <aquarhead@ela.build>"],
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/ElaWorkshop/pinboardixir"
