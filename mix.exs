@@ -23,8 +23,12 @@ defmodule Pinboardixir.Mixfile do
   defp deps do
     [{:httpoison, "~> 0.8"},
      {:poison, "~> 2.0"},
-     {:ex_doc, "~> 0.11", only: :dev},
-     {:earmark, "~> 0.1", only: :dev}]
+     {:ex_doc, "~> 0.11", only: :docs},
+     {:earmark, "~> 0.1", only: :docs},
+     {:credo, "~> 0.4.0-beta2", only: :dev},
+     {:dialyxir, "~> 0.3", only: :dev},
+     {:inch_ex, ">= 0.0.0", only: :docs},
+     {:bypass, "~> 0.5", only: :test}]
   end
 
   defp package do
