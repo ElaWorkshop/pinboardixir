@@ -22,13 +22,15 @@ defmodule Pinboardixir.Mixfile do
 
   defp deps do
     [{:httpoison, "~> 0.8"},
-     {:poison, "~> 2.0"}]
+     {:poison, "~> 2.0"},
+     {:ex_doc, "~> 0.11", only: :dev},
+     {:earmark, "~> 0.1", only: :dev}]
   end
 
   defp package do
     [
       name: :pinboardixir,
-      maintainers: ["Lou Xun"],
+      maintainers: ["Lou Xun <aquarhead@gmail.com>"],
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/ElaWorkshop/pinboardixir"
