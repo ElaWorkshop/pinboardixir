@@ -1,6 +1,6 @@
 defmodule Pinboardixir.Utils do
   @moduledoc """
-  Provides utility functions for other modules.
+  Utility functions for other modules.
   """
 
   @doc """
