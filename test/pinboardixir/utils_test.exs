@@ -7,15 +7,15 @@ defmodule Pinboardixir.UtilsTest do
     assert build_params([], [:key]) == ""
   end
 
-  test "build_params should return an encoded string for use in URL" do
-    assert build_params([tag: "Elixir Test,Tag2"], [:tag]) == "?tag=Elixir%20Test,Tag2"
+  test "build_params should return an encoded query string" do
+    assert build_params([tag: "Elixir Test,Tag2"], [:tag]) == "?tag=Elixir+Test%2CTag2"
   end
 
   test "build_params should filter out invalid options" do
     assert build_params([tag: "Tag1", invalid: "Unknown"], [:tag]) == "?tag=Tag1"
   end
 
-  test "build_params should return an empty string if nothing left after filtering valid options" do
+  test "build_params should return an empty string if no valid option exist" do
     assert build_params([invalid: "Unknown"], [:tag]) == ""
   end
 end
