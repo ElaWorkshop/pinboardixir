@@ -4,7 +4,7 @@ defmodule Pinboardixir.UtilsTest do
   import Pinboardixir.Utils
 
   test "build_params with empty options should return an empty string" do
-    assert build_params(nil, [:key]) == ""
+    assert build_params([], [:key]) == ""
   end
 
   test "build_params should return an encoded string for use in URL" do
