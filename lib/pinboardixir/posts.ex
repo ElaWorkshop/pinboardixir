@@ -1,4 +1,8 @@
 defmodule Pinboardixir.Post do
+  @moduledoc false
+
+  @doc """
+  """
   defstruct(
     href: "",
     description: "",
@@ -18,23 +22,34 @@ defmodule Pinboardixir.Posts do
   """
   alias Pinboardixir.Client
 
-  alias Pinboardixir.Post
   import Pinboardixir.Utils
+
+  alias Pinboardixir.Post
 
   @valid_all_options [:tag, :start, :results, :fromdt, :todt, :meta, :toread]
 
   @doc """
-  Get all bookmarks in the user's account, return a list of `Pinboardixir.Post` structs.
+  Get all bookmarks in the user's account.
 
-  You can pass a Keyword List as options, refer to the [official documentation](https://pinboard.in/api/#posts_all) for explaination and example. Additional notes:
-
-  - All values should be String, booleans are represented as "yes" or "no"
-  - `:tag` to filter by multiple tags, seperate them by ","
-  - Although not documented, `:toread` can be used to filter posts marked as "read later"
+  Also, `:toread` can be used to filter posts marked as "read later".
   """
+  @spec all(Client.options) :: [Post.t]
   def all(options \\ nil) do
-    Client.get!("/all" <> build_params(options, @valid_all_options)).body
+    url = "/posts/all" <> build_params(options, @valid_all_options)
+    Client.get!(url).body
     |> Poison.decode!(as: [%Post{}])
   end
 
+  @valid_get_options [:tag, :dt, :url, :meta]
+
+  @doc """
+  Get one or more posts on a single day matching the arguments. If no date or url is given, date of most recent bookmark will be used.
+  """
+  @spec get(Client.options) :: [Post.t]
+  def get(options \\ nil) do
+    url = "/posts/get" <> build_params(options, @valid_get_options)
+    Client.get!(url).body
+    |> Poison.decode!(as: %{"posts" => [%Post{}]})
+    |> Map.get("posts")
+  end
 end
