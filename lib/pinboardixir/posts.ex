@@ -2,18 +2,19 @@ defmodule Pinboardixir.Post do
   @moduledoc false
 
   @doc """
+  As described in Pinboard's API documentation, `description` is title and `extended` is description.
   """
-  defstruct(
-    href: "",
-    description: "",
-    extended: "",
-    meta: "",
-    hash: "",
-    time: "",
-    shared: false,
-    toread: false,
-    tags: []
-  )
+  defstruct [
+    :href,
+    :description,
+    :extended,
+    :meta,
+    :hash,
+    :time,
+    :shared,
+    :toread,
+    :tags,
+  ]
 end
 
 defmodule Pinboardixir.Posts do
