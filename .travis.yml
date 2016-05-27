@@ -2,7 +2,7 @@ language: elixir
 elixir:
   - 1.2.5
 before_script:
-  - mix compile
+  - MIX_ENV=test mix compile
 after_script:
   - MIX_ENV=docs mix deps.get
   - MIX_ENV=docs mix inch.report
