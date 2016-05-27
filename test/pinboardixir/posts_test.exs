@@ -39,7 +39,13 @@ defmodule Pinboardixir.PostsTest do
 
     assert Enum.count(posts) == 2
 
-    #TODO: Add date check when Elixir 1.3 release
+    #TODO: Add proper date check when Elixir 1.3 release
+    assert (
+      posts
+      |> List.first
+      |> Map.get(:time)
+      |> String.starts_with?("2016-05-26")
+    )
   end
 
   test "`add/3` should return the `result_code`", %{bypass: bypass} do
