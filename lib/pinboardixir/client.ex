@@ -6,7 +6,7 @@ defmodule Pinboardixir.Client do
   Refer to [Pinboard's official documentation](https://pinboard.in/api/) for explaination and example. Note:
 
   - All values should be String, booleans are represented by "yes" or "no"
-  - When using `:tag` with multiple tags, seperate them by ","
+  - To represent multiple tags, seperate them by space or `,`
   - Invalid keys will be filtered out before sending the request
   """
   @type options :: [{atom, String.t}]

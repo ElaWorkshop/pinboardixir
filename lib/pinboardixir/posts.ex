@@ -44,7 +44,7 @@ defmodule Pinboardixir.Posts do
   @valid_get_options [:tag, :dt, :url, :meta]
 
   @doc """
-  Get one or more posts on a single day matching the arguments. If no date or url is given, date of most recent bookmark will be used.
+  Get one or more posts on a single day matching the arguments.
   """
   @spec get(Client.options) :: [Post.t]
   def get(options \\ []) do
