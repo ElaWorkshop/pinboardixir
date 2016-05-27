@@ -1,6 +1,8 @@
 defmodule Pinboardixir.PostsTest do
   use ExUnit.Case
 
+  alias Plug.Conn
+
   setup do
     bypass = Bypass.open
     Application.put_env(:pinboardixir, :base_endpoint, "http://localhost:#{bypass.port}")
@@ -12,7 +14,7 @@ defmodule Pinboardixir.PostsTest do
       assert conn.request_path == "/posts/all"
       assert conn.method == "GET"
 
-      Plug.Conn.resp(conn, 200, ~s"""
+      Conn.resp(conn, 200, ~s"""
       [{"href":"https:\/\/www.inverse.com\/article\/10674-here-s-how-inverse-tests-external-apis-in-elixir-with-bypass","description":"Here's How Inverse Tests External APIs in Elixir with Bypass | Inverse","extended":"","meta":"84e86a26498c391f66663d0974f6001e","hash":"f9153afe872f421073cda4219d0429d0","time":"2016-05-26T11:17:28Z","shared":"yes","toread":"no","tags":"Elixir Test Bypass Mock"},{"href":"http:\/\/nsomar.com\/elixir-enumerated-types\/","description":"Enumerated types in Elixir","extended":"","meta":"aace15c2b83cd4a7bedf12bd430677ff","hash":"165f8a7353a76c7c3a3a1458d84b3420","time":"2016-05-26T09:12:09Z","shared":"yes","toread":"no","tags":"Elixir"}]
       """)
     end
@@ -28,7 +30,7 @@ defmodule Pinboardixir.PostsTest do
       assert conn.method == "GET"
       assert String.contains?(conn.query_string, "dt=2016-05-26")
 
-      Plug.Conn.resp(conn, 200, ~s"""
+      Conn.resp(conn, 200, ~s"""
       {"date":"2016-05-26T09:12:09Z","user":"aquarhead","posts":[{"href":"http:\/\/nsomar.com\/elixir-enumerated-types\/","description":"Enumerated types in Elixir","extended":"","meta":"aace15c2b83cd4a7bedf12bd430677ff","hash":"165f8a7353a76c7c3a3a1458d84b3420","time":"2016-05-26T09:12:09Z","shared":"yes","toread":"no","tags":"Elixir"},{"href":"https:\/\/www.inverse.com\/article\/10674-here-s-how-inverse-tests-external-apis-in-elixir-with-bypass","description":"Here's How Inverse Tests External APIs in Elixir with Bypass | Inverse","extended":"","meta":"84e86a26498c391f66663d0974f6001e","hash":"f9153afe872f421073cda4219d0429d0","time":"2016-05-26T11:17:28Z","shared":"yes","toread":"no","tags":"Elixir Test Bypass Mock"}]}
       """)
     end
@@ -38,5 +40,27 @@ defmodule Pinboardixir.PostsTest do
     assert Enum.count(posts) == 2
 
     #TODO: Add date check when Elixir 1.3 release
+  end
+
+  test "`add/3` should return the `result_code`", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/add"
+      assert conn.method == "GET" #"All API methods are GET requests"
+
+      conn = conn
+      |> Conn.fetch_query_params()
+
+      assert conn.query_params["url"] == "http://example.com"
+      assert conn.query_params["description"] == "Test Title"
+      assert conn.query_params["tags"] == "Elixir,Test"
+
+      Conn.resp(conn, 200, ~s<{"result_code":"done"}>)
+    end
+
+    result_code = Pinboardixir.Posts.add("http://example.com",
+      "Test Title",
+      [tags: "Elixir,Test"])
+
+    assert result_code == "done"
   end
 end
