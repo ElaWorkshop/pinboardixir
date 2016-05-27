@@ -6,7 +6,7 @@ defmodule Pinboardixir.Utils do
   @doc """
   Filter raw_options with valid_options, then build the url parameters string.
   """
-  def build_params(nil, _), do: ""
+  def build_params([], _), do: ""
   def build_params(raw_options, valid_options) do
     raw_options
     |> Keyword.take(valid_options)

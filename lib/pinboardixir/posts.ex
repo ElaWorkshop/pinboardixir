@@ -35,7 +35,7 @@ defmodule Pinboardixir.Posts do
   Also, `:toread` can be used to filter posts marked as "read later".
   """
   @spec all(Client.options) :: [Post.t]
-  def all(options \\ nil) do
+  def all(options \\ []) do
     url = "/posts/all" <> build_params(options, @valid_all_options)
     Client.get!(url).body
     |> Poison.decode!(as: [%Post{}])
@@ -47,10 +47,29 @@ defmodule Pinboardixir.Posts do
   Get one or more posts on a single day matching the arguments. If no date or url is given, date of most recent bookmark will be used.
   """
   @spec get(Client.options) :: [Post.t]
-  def get(options \\ nil) do
+  def get(options \\ []) do
     url = "/posts/get" <> build_params(options, @valid_get_options)
     Client.get!(url).body
     |> Poison.decode!(as: %{"posts" => [%Post{}]})
     |> Map.get("posts")
+  end
+
+  @valid_add_options [:url, :description, :extended,
+                      :tags, :dt, :replace, :shared, :toread]
+
+  @doc """
+  Add a bookmark.
+  """
+  @spec add(String.t, String.t, Client.options) :: String.t
+  def add(url, description, options \\ []) do
+    request_url = "/posts/add" <> (
+      [url: url, description: description]
+      |> Keyword.merge(options)
+      |> build_params(@valid_add_options)
+    )
+
+    Client.get!(request_url).body
+    |> Poison.decode!
+    |> Map.get("result_code")
   end
 end

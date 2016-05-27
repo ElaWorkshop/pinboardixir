@@ -9,7 +9,7 @@ defmodule Pinboardixir.Client do
   - When using `:tag` with multiple tags, seperate them by ","
   - Invalid keys will be filtered out before sending the request
   """
-  @type options :: [{atom, String.t}] | nil
+  @type options :: [{atom, String.t}]
 
   @token_and_json "auth_token=#{Application.get_env(:pinboardixir, :auth_token)}&format=json"
 

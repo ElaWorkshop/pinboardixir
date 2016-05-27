@@ -37,6 +37,6 @@ defmodule Pinboardixir.PostsTest do
 
     assert Enum.count(posts) == 2
 
-    #TODO: Add date check
+    #TODO: Add date check when Elixir 1.3 release
   end
 end
