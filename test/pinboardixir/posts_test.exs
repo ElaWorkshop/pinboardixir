@@ -121,4 +121,20 @@ defmodule Pinboardixir.PostsTest do
 
     assert Enum.count(posts) == 2
   end
+
+  test "`suggest/1` should return a mapped list of tags", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/suggest"
+      assert conn.method == "GET"
+
+      conn = Conn.fetch_query_params conn
+      assert conn.query_params["url"] == "http://www.ulisp.com/"
+
+      Conn.resp(conn, 200, ~s<[{"popular":[]},{"recommended":["arduino","lisp","hardware","programming","compiler","scheme"]}]>)
+    end
+
+    suggested_tags = Pinboardixir.Posts.suggest("http://www.ulisp.com/")
+    assert Map.has_key?(suggested_tags, "recommended")
+    assert (suggested_tags |> Map.get("recommended") |> Enum.count) == 6
+  end
 end

@@ -108,4 +108,23 @@ defmodule Pinboardixir.Posts do
     |> Poison.decode!(as: %{"posts" => [%Post{}]})
     |> Map.get("posts")
   end
+
+  @doc """
+  For a given URL, returns a mapped list of popular and recommended tags.
+
+  ## Example
+
+      iex> Pinboardixir.Posts.suggest("http://www.ulisp.com/")
+      %{"popular" => [],
+      "recommended" => ["arduino", "lisp", "hardware", "programming", "compiler",
+      "scheme"]}
+  """
+  @spec suggest(String.t) :: Map.t
+  def suggest(url) do
+    request_url = "/posts/suggest" <> build_params([url: url], [:url])
+    Client.get!(request_url).body
+    |> Poison.decode!
+    |> Enum.reduce(Map.new, fn x, acc -> Map.merge(x, acc) end)
+  end
+
 end
