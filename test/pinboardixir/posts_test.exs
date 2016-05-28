@@ -54,7 +54,6 @@ defmodule Pinboardixir.PostsTest do
       assert conn.method == "GET" #"All API methods are GET requests"
 
       conn = Conn.fetch_query_params conn
-
       assert conn.query_params["url"] == "http://example.com"
       assert conn.query_params["description"] == "Test Title"
       assert conn.query_params["tags"] == "Elixir,Test"
@@ -75,7 +74,6 @@ defmodule Pinboardixir.PostsTest do
       assert conn.method == "GET"
 
       conn = Conn.fetch_query_params conn
-
       assert conn.query_params["url"] == "http://example.com"
 
       Conn.resp(conn, 200, ~s<{"result_code":"done"}>)
@@ -92,7 +90,6 @@ defmodule Pinboardixir.PostsTest do
       assert conn.method == "GET"
 
       conn = Conn.fetch_query_params conn
-
       assert conn.query_params["tag"] == "Elixir"
 
       Conn.resp(conn, 200, ~s"""
@@ -104,5 +101,24 @@ defmodule Pinboardixir.PostsTest do
 
     assert Enum.count(result) == 2
     assert Map.get(result, "2016-05-28") == 1
+  end
+
+  test "`recent/1` should return a list of `Pinboardixir.Post`", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/recent"
+      assert conn.method == "GET"
+
+      conn = Conn.fetch_query_params conn
+      assert conn.query_params["tag"] == "Elixir"
+      assert conn.query_params["count"] == "2"
+
+      Conn.resp(conn, 200, ~s"""
+      {"date":"2016-05-28T08:41:59Z","user":"aquarhead","posts":[{"href":"http:\/\/asquera.de\/blog\/2015-04-10\/writing-a-commandline-app-in-elixir\/","description":"Writing a command line application in Elixir","extended":"","meta":"5c074d2bed814e7573d8dc0617693619","hash":"90e81611fb61b089e19ba99041d12141","time":"2016-05-28T08:41:59Z","shared":"yes","toread":"no","tags":"Elixir CLI"},{"href":"http:\/\/eftimov.net\/writing-elixir-cli-apps","description":"Writing command line apps with Elixir","extended":"","meta":"79842b7d63aa85d288ef326d655e7e5e","hash":"91dee7b47a67bb0d2b732b52bc19d654","time":"2016-05-27T12:41:43Z","shared":"yes","toread":"no","tags":"Elixir CLI"}]}
+      """)
+    end
+
+    posts = Pinboardixir.Posts.recent([tag: "Elixir", count: "2"])
+
+    assert Enum.count(posts) == 2
   end
 end

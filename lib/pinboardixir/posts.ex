@@ -97,4 +97,15 @@ defmodule Pinboardixir.Posts do
     |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
     |> Enum.into(Map.new)
   end
+
+  @doc """
+  Returns a list of the user's most recent posts.
+  """
+  @spec recent(Client.options) :: [%Post{}]
+  def recent(options \\ []) do
+    request_url = "/posts/recent" <> build_params(options, [:tag, :count])
+    Client.get!(request_url).body
+    |> Poison.decode!(as: %{"posts" => [%Post{}]})
+    |> Map.get("posts")
+  end
 end
