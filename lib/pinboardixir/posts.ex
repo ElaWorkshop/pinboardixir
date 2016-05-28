@@ -72,4 +72,18 @@ defmodule Pinboardixir.Posts do
     |> Poison.decode!
     |> Map.get("result_code")
   end
+
+  @valid_delete_options [:url]
+
+  @doc """
+  Delete a bookmark.
+  """
+  @spec delete(String.t) :: String.t
+  def delete(url) do
+    request_url = "/posts/delete" <> build_params([url: url], @valid_delete_options)
+
+    Client.get!(request_url).body
+    |> Poison.decode!
+    |> Map.get("result_code")
+  end
 end

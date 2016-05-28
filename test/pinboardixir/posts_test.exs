@@ -53,8 +53,7 @@ defmodule Pinboardixir.PostsTest do
       assert conn.request_path == "/posts/add"
       assert conn.method == "GET" #"All API methods are GET requests"
 
-      conn = conn
-      |> Conn.fetch_query_params()
+      conn = conn |> Conn.fetch_query_params
 
       assert conn.query_params["url"] == "http://example.com"
       assert conn.query_params["description"] == "Test Title"
@@ -66,6 +65,23 @@ defmodule Pinboardixir.PostsTest do
     result_code = Pinboardixir.Posts.add("http://example.com",
       "Test Title",
       [tags: "Elixir,Test"])
+
+    assert result_code == "done"
+  end
+
+  test "`delete/1` should return the `result_code`", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/delete"
+      assert conn.method == "GET"
+
+      conn = conn |> Conn.fetch_query_params
+
+      assert conn.query_params["url"] == "http://example.com"
+
+      Conn.resp(conn, 200, ~s<{"result_code":"done"}>)
+    end
+
+    result_code = Pinboardixir.Posts.delete("http://example.com")
 
     assert result_code == "done"
   end
