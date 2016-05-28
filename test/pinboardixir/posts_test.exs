@@ -53,7 +53,7 @@ defmodule Pinboardixir.PostsTest do
       assert conn.request_path == "/posts/add"
       assert conn.method == "GET" #"All API methods are GET requests"
 
-      conn = conn |> Conn.fetch_query_params
+      conn = Conn.fetch_query_params conn
 
       assert conn.query_params["url"] == "http://example.com"
       assert conn.query_params["description"] == "Test Title"
@@ -74,7 +74,7 @@ defmodule Pinboardixir.PostsTest do
       assert conn.request_path == "/posts/delete"
       assert conn.method == "GET"
 
-      conn = conn |> Conn.fetch_query_params
+      conn = Conn.fetch_query_params conn
 
       assert conn.query_params["url"] == "http://example.com"
 
@@ -84,5 +84,25 @@ defmodule Pinboardixir.PostsTest do
     result_code = Pinboardixir.Posts.delete("http://example.com")
 
     assert result_code == "done"
+  end
+
+  test "`dates/1` should return a Map with date string as key, int as value", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/dates"
+      assert conn.method == "GET"
+
+      conn = Conn.fetch_query_params conn
+
+      assert conn.query_params["tag"] == "Elixir"
+
+      Conn.resp(conn, 200, ~s"""
+      {"user":"aquarhead","tag":"Elixir","dates":{"2016-05-28":"1","2016-05-27":"1"}}
+      """)
+    end
+
+    result = Pinboardixir.Posts.dates([tag: "Elixir"])
+
+    assert Enum.count(result) == 2
+    assert Map.get(result, "2016-05-28") == 1
   end
 end

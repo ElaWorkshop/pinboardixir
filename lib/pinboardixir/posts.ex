@@ -73,17 +73,28 @@ defmodule Pinboardixir.Posts do
     |> Map.get("result_code")
   end
 
-  @valid_delete_options [:url]
-
   @doc """
   Delete a bookmark.
   """
   @spec delete(String.t) :: String.t
   def delete(url) do
-    request_url = "/posts/delete" <> build_params([url: url], @valid_delete_options)
+    request_url = "/posts/delete" <> build_params([url: url], [:url])
 
     Client.get!(request_url).body
     |> Poison.decode!
     |> Map.get("result_code")
+  end
+
+  @doc """
+  Returns a list of dates with the number of posts at each date.
+  """
+  @spec dates(Client.options) :: %{String.t => integer}
+  def dates(options \\ []) do
+    request_url = "/posts/dates" <> build_params(options, [:tag])
+    Client.get!(request_url).body
+    |> Poison.decode!
+    |> Map.get("dates")
+    |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
+    |> Enum.into(Map.new)
   end
 end
