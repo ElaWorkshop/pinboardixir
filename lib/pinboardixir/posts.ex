@@ -21,11 +21,22 @@ defmodule Pinboardixir.Posts do
   @moduledoc """
   Endpoints under "/posts".
   """
-  alias Pinboardixir.Client
-
   import Pinboardixir.Utils
 
+  alias Pinboardixir.Client
   alias Pinboardixir.Post
+
+  @doc """
+  Returns the most recent time a bookmark was added, updated or deleted.
+
+  Use this before calling posts/all to see if the data has changed since the last fetch.
+  """
+  @spec update() :: String.t # TODO: make this into DateTime after Elixir 1.3
+  def update do
+    Client.get!("/posts/update").body
+    |> Poison.decode!
+    |> Map.get("update_time")
+  end
 
   @valid_all_options [:tag, :start, :results, :fromdt, :todt, :meta, :toread]
 

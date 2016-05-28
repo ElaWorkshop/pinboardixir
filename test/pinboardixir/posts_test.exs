@@ -9,6 +9,18 @@ defmodule Pinboardixir.PostsTest do
     {:ok, bypass: bypass}
   end
 
+  test "`update/0` should return a DateTime (currently as String)", %{bypass: bypass} do
+    Bypass.expect bypass, fn conn ->
+      assert conn.request_path == "/posts/update"
+      assert conn.method == "GET"
+
+      Conn.resp(conn, 200, ~s<{"update_time":"2016-05-28T10:50:51Z"}>)
+    end
+
+    update_time = Pinboardixir.Posts.update
+    assert update_time == "2016-05-28T10:50:51Z"
+  end
+
   test "`all/1` should return a list of `Pinboardixir.Post`", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert conn.request_path == "/posts/all"
@@ -20,7 +32,6 @@ defmodule Pinboardixir.PostsTest do
     end
 
     posts = Pinboardixir.Posts.all()
-
     assert Enum.count(posts) == 2
   end
 
@@ -36,9 +47,7 @@ defmodule Pinboardixir.PostsTest do
     end
 
     posts = Pinboardixir.Posts.get([dt: "2016-05-26"])
-
     assert Enum.count(posts) == 2
-
     #TODO: Add proper date check when Elixir 1.3 release
     assert (
       posts
@@ -64,7 +73,6 @@ defmodule Pinboardixir.PostsTest do
     result_code = Pinboardixir.Posts.add("http://example.com",
       "Test Title",
       [tags: "Elixir,Test"])
-
     assert result_code == "done"
   end
 
@@ -80,7 +88,6 @@ defmodule Pinboardixir.PostsTest do
     end
 
     result_code = Pinboardixir.Posts.delete("http://example.com")
-
     assert result_code == "done"
   end
 
@@ -98,7 +105,6 @@ defmodule Pinboardixir.PostsTest do
     end
 
     result = Pinboardixir.Posts.dates([tag: "Elixir"])
-
     assert Enum.count(result) == 2
     assert Map.get(result, "2016-05-28") == 1
   end
@@ -118,7 +124,6 @@ defmodule Pinboardixir.PostsTest do
     end
 
     posts = Pinboardixir.Posts.recent([tag: "Elixir", count: "2"])
-
     assert Enum.count(posts) == 2
   end
 
