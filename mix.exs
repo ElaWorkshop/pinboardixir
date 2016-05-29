@@ -28,7 +28,7 @@ defmodule Pinboardixir.Mixfile do
      {:credo, "~> 0.4.0-beta2", only: :dev},
      {:dialyxir, "~> 0.3", only: :dev},
      {:inch_ex, ">= 0.0.0", only: :docs},
-     {:bypass, "~> 0.5", only: [:dev, :test]}]
+     {:bypass, github: "PSPDFKit-labs/bypass", only: [:dev, :test]}]
   end
 
   defp package do
