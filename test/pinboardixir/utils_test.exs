@@ -8,7 +8,7 @@ defmodule Pinboardixir.UtilsTest do
   end
 
   test "build_params should return an encoded query string" do
-    assert build_params([tag: "Elixir Test,Tag2"], [:tag]) == "?tag=Elixir+Test%2CTag2"
+    assert build_params([tag: "Elixir Test,Tag2"]) == "?tag=Elixir+Test%2CTag2"
   end
 
   test "build_params should filter out invalid options" do
