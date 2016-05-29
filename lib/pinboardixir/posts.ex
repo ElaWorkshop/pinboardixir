@@ -47,8 +47,8 @@ defmodule Pinboardixir.Posts do
   """
   @spec all(Client.options) :: [Post.t]
   def all(options \\ []) do
-    url = "/posts/all" <> build_params(options, @valid_all_options)
-    Client.get!(url).body
+    request_url = "/posts/all" <> build_params(options, @valid_all_options)
+    Client.get!(request_url).body
     |> Poison.decode!(as: [%Post{}])
   end
 
@@ -59,8 +59,8 @@ defmodule Pinboardixir.Posts do
   """
   @spec get(Client.options) :: [Post.t]
   def get(options \\ []) do
-    url = "/posts/get" <> build_params(options, @valid_get_options)
-    Client.get!(url).body
+    request_url = "/posts/get" <> build_params(options, @valid_get_options)
+    Client.get!(request_url).body
     |> Poison.decode!(as: %{"posts" => [%Post{}]})
     |> Map.get("posts")
   end
@@ -89,7 +89,7 @@ defmodule Pinboardixir.Posts do
   """
   @spec delete(String.t) :: String.t
   def delete(url) do
-    request_url = "/posts/delete" <> build_params([url: url], [:url])
+    request_url = "/posts/delete" <> build_params([url: url])
 
     Client.get!(request_url).body
     |> Poison.decode!
@@ -132,7 +132,7 @@ defmodule Pinboardixir.Posts do
   """
   @spec suggest(String.t) :: Map.t
   def suggest(url) do
-    request_url = "/posts/suggest" <> build_params([url: url], [:url])
+    request_url = "/posts/suggest" <> build_params([url: url])
     Client.get!(request_url).body
     |> Poison.decode!
     |> Enum.reduce(Map.new, fn x, acc -> Map.merge(x, acc) end)

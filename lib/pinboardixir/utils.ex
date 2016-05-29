@@ -4,9 +4,17 @@ defmodule Pinboardixir.Utils do
   """
 
   @doc """
-  Filter raw_options with valid_options, then build the url parameters string.
+  Build a query string from `raw_options`.
   """
-  def build_params([], _), do: ""
+  def build_params(raw_options) do
+    raw_options
+    |> URI.encode_query
+    |> prefix_question_mark
+  end
+
+  @doc """
+  Filter `raw_options` with `valid_options`, then build a query string.
+  """
   def build_params(raw_options, valid_options) do
     raw_options
     |> Keyword.take(valid_options)
