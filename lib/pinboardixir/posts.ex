@@ -46,7 +46,7 @@ defmodule Pinboardixir.Posts do
 
   Also, `:toread` can be used to filter posts marked as "read later".
   """
-  @spec all(Client.options) :: [Post.t]
+  @spec all(Types.options) :: [Post.t]
   def all(options \\ []) do
     request_url = "/posts/all" <> build_params(options, @valid_all_options)
     Client.get!(request_url).body
@@ -58,7 +58,7 @@ defmodule Pinboardixir.Posts do
   @doc """
   Get one or more posts on a single day matching the arguments.
   """
-  @spec get(Client.options) :: [Post.t]
+  @spec get(Types.options) :: [Post.t]
   def get(options \\ []) do
     request_url = "/posts/get" <> build_params(options, @valid_get_options)
     Client.get!(request_url).body
@@ -72,7 +72,7 @@ defmodule Pinboardixir.Posts do
   @doc """
   Add a bookmark.
   """
-  @spec add(String.t, String.t, Client.options) :: Types.result
+  @spec add(String.t, String.t, Types.options) :: Types.result
   def add(url, description, options \\ []) do
     request_url = "/posts/add" <> (
       [url: url, description: description]
@@ -102,7 +102,7 @@ defmodule Pinboardixir.Posts do
   @doc """
   Returns a list of dates with the number of posts at each date.
   """
-  @spec dates(Client.options) :: %{String.t => integer}
+  @spec dates(Types.options) :: %{String.t => integer}
   def dates(options \\ []) do
     request_url = "/posts/dates" <> build_params(options, [:tag])
     Client.get!(request_url).body
@@ -115,7 +115,7 @@ defmodule Pinboardixir.Posts do
   @doc """
   Returns a list of the user's most recent posts.
   """
-  @spec recent(Client.options) :: [%Post{}]
+  @spec recent(Types.options) :: [%Post{}]
   def recent(options \\ []) do
     request_url = "/posts/recent" <> build_params(options, [:tag, :count])
     Client.get!(request_url).body
