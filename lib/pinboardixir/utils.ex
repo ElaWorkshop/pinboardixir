@@ -3,6 +3,8 @@ defmodule Pinboardixir.Utils do
   Utility functions for other modules.
   """
 
+  alias Pinboardixir.Types
+
   @doc """
   Build a query string from `raw_options`.
   """
@@ -24,4 +26,11 @@ defmodule Pinboardixir.Utils do
 
   defp prefix_question_mark(""), do: ""
   defp prefix_question_mark(query_string), do: "?" <> query_string
+
+  @doc """
+  Convert `result_code` to `:ok` or `{:error, reason}`.
+  """
+  @spec convert_result(String.t) :: Types.result
+  def convert_result("done"), do: :ok
+  def convert_result(error_reason), do: {:error, error_reason}
 end

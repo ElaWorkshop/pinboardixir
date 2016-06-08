@@ -22,7 +22,7 @@ defmodule Pinboardixir.TagsTest do
     assert Map.get(tags, "Animation") == 3
   end
 
-  test "`delete/1` should return a `result` as String", %{bypass: bypass} do
+  test "`delete/1` should return a `result`", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert conn.request_path == "/tags/delete"
       assert conn.method == "GET"
@@ -34,10 +34,10 @@ defmodule Pinboardixir.TagsTest do
     end
 
     result = Pinboardixir.Tags.delete("Elixir")
-    assert result == "done"
+    assert result == :ok
   end
 
-  test "`rename/2` should return a `result` as String", %{bypass: bypass} do
+  test "`rename/2` should return a `result`", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert conn.request_path == "/tags/rename"
       assert conn.method == "GET"
@@ -50,6 +50,6 @@ defmodule Pinboardixir.TagsTest do
     end
 
     result = Pinboardixir.Tags.rename("Eixir", "Elixir")
-    assert result == "done"
+    assert result == :ok
   end
 end

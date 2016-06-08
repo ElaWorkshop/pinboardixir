@@ -22,5 +22,4 @@ defmodule Pinboardixir.Client do
       request_url <> "?" <> @token_and_json
     end
   end
-
 end

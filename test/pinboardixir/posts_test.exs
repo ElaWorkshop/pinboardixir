@@ -57,7 +57,7 @@ defmodule Pinboardixir.PostsTest do
     )
   end
 
-  test "`add/3` should return the `result_code`", %{bypass: bypass} do
+  test "`add/3` should return a `Types.result`", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert conn.request_path == "/posts/add"
       assert conn.method == "GET" #"All API methods are GET requests"
@@ -73,10 +73,10 @@ defmodule Pinboardixir.PostsTest do
     result_code = Pinboardixir.Posts.add("http://example.com",
       "Test Title",
       [tags: "Elixir,Test"])
-    assert result_code == "done"
+    assert result_code == :ok
   end
 
-  test "`delete/1` should return the `result_code`", %{bypass: bypass} do
+  test "`delete/1` should return a `Types.result`", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert conn.request_path == "/posts/delete"
       assert conn.method == "GET"
@@ -88,7 +88,7 @@ defmodule Pinboardixir.PostsTest do
     end
 
     result_code = Pinboardixir.Posts.delete("http://example.com")
-    assert result_code == "done"
+    assert result_code == :ok
   end
 
   test "`dates/1` should return a Map with date string as key, int as value", %{bypass: bypass} do

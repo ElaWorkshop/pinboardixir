@@ -25,6 +25,7 @@ defmodule Pinboardixir.Posts do
 
   alias Pinboardixir.Client
   alias Pinboardixir.Post
+  alias Pinboardixir.Types
 
   @doc """
   Returns the most recent time a bookmark was added, updated or deleted.
@@ -71,7 +72,7 @@ defmodule Pinboardixir.Posts do
   @doc """
   Add a bookmark.
   """
-  @spec add(String.t, String.t, Client.options) :: String.t
+  @spec add(String.t, String.t, Client.options) :: Types.result
   def add(url, description, options \\ []) do
     request_url = "/posts/add" <> (
       [url: url, description: description]
@@ -82,18 +83,20 @@ defmodule Pinboardixir.Posts do
     Client.get!(request_url).body
     |> Poison.decode!
     |> Map.get("result_code")
+    |> convert_result
   end
 
   @doc """
   Delete a bookmark.
   """
-  @spec delete(String.t) :: String.t
+  @spec delete(String.t) :: Types.result
   def delete(url) do
     request_url = "/posts/delete" <> build_params([url: url])
 
     Client.get!(request_url).body
     |> Poison.decode!
     |> Map.get("result_code")
+    |> convert_result
   end
 
   @doc """
@@ -137,5 +140,4 @@ defmodule Pinboardixir.Posts do
     |> Poison.decode!
     |> Enum.reduce(Map.new, fn x, acc -> Map.merge(x, acc) end)
   end
-
 end
