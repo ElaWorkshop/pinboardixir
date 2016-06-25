@@ -108,7 +108,7 @@ defmodule Pinboardixir.Posts do
     Client.get!(request_url).body
     |> Poison.decode!
     |> Map.get("dates")
-    |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
+    |> Enum.map(fn {k, v} -> {Date.from_iso8601!(k), String.to_integer(v)} end)
     |> Enum.into(Map.new)
   end
 

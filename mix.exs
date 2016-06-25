@@ -4,7 +4,7 @@ defmodule Pinboardixir.Mixfile do
   def project do
     [app: :pinboardixir,
      version: "0.2.0",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description,

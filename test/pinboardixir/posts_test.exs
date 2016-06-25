@@ -106,7 +106,7 @@ defmodule Pinboardixir.PostsTest do
 
     result = Pinboardixir.Posts.dates([tag: "Elixir"])
     assert Enum.count(result) == 2
-    assert Map.get(result, "2016-05-28") == 1
+    assert Map.get(result, ~D[2016-05-28]) == 1
   end
 
   test "`recent/1` should return a list of `Pinboardixir.Post`", %{bypass: bypass} do
